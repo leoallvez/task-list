@@ -9,7 +9,7 @@ import io.github.leoallvez.tasklist.TaskRepository
 import javax.inject.Inject
 
 @HiltViewModel
-class ListTasksViewModel @Inject constructor(private val repository: TaskRepository) : ViewModel() {
+class ListTasksViewModel @Inject constructor(repository: TaskRepository) : ViewModel() {
 
     val task: LiveData<List<Task>> = repository.getTasks()
 

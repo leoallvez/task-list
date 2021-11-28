@@ -41,15 +41,10 @@ fun TaskApp() {
     val navController = rememberNavController()
     NavHost(navController = navController, startDestination = Screen.List.route) {
         composable(route = Screen.List.route) {
-            val viewModel = hiltViewModel<ListTasksViewModel>()
-            ListTasksScreen(
-                viewModel = viewModel,
-                nav = navController
-            )
+            ListTasksScreen(nav = navController)
         }
         composable(route = Screen.Create.route) {
-            val viewModel = hiltViewModel<CreateTaskViewModel>()
-            CreateTaskScreen(viewModel)
+            CreateTaskScreen()
         }
         composable(
             route = Screen.Edit.route,
@@ -58,8 +53,7 @@ fun TaskApp() {
             })
         ) { navBackStackEntry ->
             val taskId = navBackStackEntry.arguments?.getInt("task_id")
-            val viewModel = hiltViewModel<EditTaskViewModel>()
-            EditTaskScreen(taskId = taskId, viewModel = viewModel)
+            EditTaskScreen(taskId = taskId)
         }
     }
 }

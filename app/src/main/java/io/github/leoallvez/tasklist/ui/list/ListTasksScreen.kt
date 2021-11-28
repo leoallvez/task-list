@@ -7,7 +7,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -16,17 +15,19 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import io.github.leoallvez.tasklist.Task
-import io.github.leoallvez.tasklist.ui.theme.Purple700
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import io.github.leoallvez.tasklist.R
 import io.github.leoallvez.tasklist.Screen
+import io.github.leoallvez.tasklist.Task
+import io.github.leoallvez.tasklist.ui.theme.Purple700
 
 @Composable
-fun ListTasksScreen(viewModel: ListTasksViewModel, nav: NavController?) {
+fun ListTasksScreen(
+    viewModel: ListTasksViewModel = hiltViewModel(),
+    nav: NavController?
+) {
 
-    val tasks = viewModel.task.observeAsState(initial = listOf())
+    val tasks = viewModel.task.observeAsState(initial = listOf()).value
     Scaffold(topBar = { AppBar() },
         floatingActionButtonPosition = FabPosition.End,
         floatingActionButton = {
@@ -35,15 +36,15 @@ fun ListTasksScreen(viewModel: ListTasksViewModel, nav: NavController?) {
             }
         },
         content = {
-//            if(tasks.isEmpty()) {
-//                Surface(modifier = Modifier.fillMaxWidth()) {
-//                    Text(text = "List is empty")
-//                }
-//            } else {
-//                TaskList(tasks) { taskId ->
-//                    nav?.navigate(route = Screen.Edit.editRoute(taskId))
-//                }
-//            }
+            if(tasks.isEmpty()) {
+                Surface(modifier = Modifier.fillMaxWidth()) {
+                    Text(text = "List is empty")
+                }
+            } else {
+                TaskList(tasks) { taskId ->
+                    nav?.navigate(route = Screen.Edit.editRoute(taskId))
+                }
+            }
         }
     )
 }
