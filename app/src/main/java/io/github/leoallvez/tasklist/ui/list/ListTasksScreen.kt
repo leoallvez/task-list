@@ -18,7 +18,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import io.github.leoallvez.tasklist.R
 import io.github.leoallvez.tasklist.Screen
-import io.github.leoallvez.tasklist.Task
+import io.github.leoallvez.tasklist.model.Task
 import io.github.leoallvez.tasklist.ui.theme.Purple700
 
 @Composable

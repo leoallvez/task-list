@@ -6,7 +6,6 @@ import androidx.activity.compose.setContent
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -14,11 +13,8 @@ import androidx.navigation.compose.navArgument
 import androidx.navigation.compose.rememberNavController
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.leoallvez.tasklist.ui.create.CreateTaskScreen
-import io.github.leoallvez.tasklist.ui.create.CreateTaskViewModel
 import io.github.leoallvez.tasklist.ui.edit.EditTaskScreen
-import io.github.leoallvez.tasklist.ui.edit.EditTaskViewModel
 import io.github.leoallvez.tasklist.ui.list.ListTasksScreen
-import io.github.leoallvez.tasklist.ui.list.ListTasksViewModel
 import io.github.leoallvez.tasklist.ui.theme.TaskListTheme
 
 @AndroidEntryPoint

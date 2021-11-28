@@ -1,7 +1,8 @@
-package io.github.leoallvez.tasklist
+package io.github.leoallvez.tasklist.repository
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import io.github.leoallvez.tasklist.model.Task
 import javax.inject.Inject
 
 class TaskRepository @Inject constructor() {
