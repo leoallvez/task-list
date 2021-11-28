@@ -1,7 +1,10 @@
 package io.github.leoallvez.tasklist.ui.create
 
 import androidx.lifecycle.ViewModel
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-class CreateTaskViewModel : ViewModel() {
+@HiltViewModel
+class CreateTaskViewModel @Inject constructor() : ViewModel() {
 
 }

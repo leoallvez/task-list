@@ -15,6 +15,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import io.github.leoallvez.tasklist.Task
 import io.github.leoallvez.tasklist.ui.theme.Purple700
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -23,11 +24,9 @@ import io.github.leoallvez.tasklist.R
 import io.github.leoallvez.tasklist.Screen
 
 @Composable
-fun ListTasksScreen(
-    tasksViewModel: ListTasksViewModel = viewModel(),
-    nav: NavController?
-) {
-    val tasks by tasksViewModel.task.observeAsState(initial = listOf())
+fun ListTasksScreen(viewModel: ListTasksViewModel, nav: NavController?) {
+
+    val tasks = viewModel.task.observeAsState(initial = listOf())
     Scaffold(topBar = { AppBar() },
         floatingActionButtonPosition = FabPosition.End,
         floatingActionButton = {
@@ -36,15 +35,15 @@ fun ListTasksScreen(
             }
         },
         content = {
-            if(tasks.isEmpty()) {
-                Surface(modifier = Modifier.fillMaxWidth()) {
-                    Text(text = "List is empty")
-                }
-            } else {
-                TaskList(tasks) { taskId ->
-                    nav?.navigate(route = Screen.Edit.editRoute(taskId))
-                }
-            }
+//            if(tasks.isEmpty()) {
+//                Surface(modifier = Modifier.fillMaxWidth()) {
+//                    Text(text = "List is empty")
+//                }
+//            } else {
+//                TaskList(tasks) { taskId ->
+//                    nav?.navigate(route = Screen.Edit.editRoute(taskId))
+//                }
+//            }
         }
     )
 }
@@ -127,5 +126,5 @@ fun TaskItem(task: Task, onClickItem: () -> Unit) {
 @Composable
 @Preview
 fun PreviewMainScreen() {
-    ListTasksScreen(nav = null)
+    //ListTasksScreen(nav = null)
 }

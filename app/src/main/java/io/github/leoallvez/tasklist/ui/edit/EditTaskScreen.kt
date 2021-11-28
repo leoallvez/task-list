@@ -6,7 +6,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 
 @Composable
 fun EditTaskScreen(
-    viewModel: EditTaskViewModel = viewModel(),
+    viewModel: EditTaskViewModel,
     taskId: Int?
 ) {
     Text(text = "editing id: $taskId")

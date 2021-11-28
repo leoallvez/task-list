@@ -5,6 +5,6 @@ import androidx.compose.runtime.Composable
 import androidx.lifecycle.viewmodel.compose.viewModel
 
 @Composable
-fun CreateTaskScreen(viewModel: CreateTaskViewModel = viewModel()) {
+fun CreateTaskScreen(viewModel: CreateTaskViewModel) {
     Text(text = "Create task screen")
 }
