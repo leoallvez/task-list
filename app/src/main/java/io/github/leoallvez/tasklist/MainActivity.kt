@@ -33,15 +33,15 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun TaskApp() {
     val navController = rememberNavController()
-    NavHost(navController = navController, startDestination = "task_list") {
-        composable(route = "task_list") {
-            ListTasksScreen (nav = navController)
+    NavHost(navController = navController, startDestination = Screen.List.route) {
+        composable(route = Screen.List.route) {
+            ListTasksScreen(nav = navController)
         }
-        composable(route= "create_task") {
+        composable(route = Screen.Create.route) {
             CreateTaskScreen()
         }
         composable(
-            route = "edit_task/{task_id}",
+            route = Screen.Edit.route,
             arguments = listOf(navArgument(name = "task_id") {
                 type = NavType.IntType
             })

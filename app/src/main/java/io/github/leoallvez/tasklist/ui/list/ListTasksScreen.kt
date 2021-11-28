@@ -20,6 +20,7 @@ import io.github.leoallvez.tasklist.ui.theme.Purple700
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import io.github.leoallvez.tasklist.R
+import io.github.leoallvez.tasklist.Screen
 
 @Composable
 fun ListTasksScreen(
@@ -31,7 +32,7 @@ fun ListTasksScreen(
         floatingActionButtonPosition = FabPosition.End,
         floatingActionButton = {
             AddTaskButton {
-                nav?.navigate(route = "create_task")
+                nav?.navigate(route = Screen.Create.route)
             }
         },
         content = {
@@ -41,7 +42,7 @@ fun ListTasksScreen(
                 }
             } else {
                 TaskList(tasks) { taskId ->
-                    nav?.navigate(route = "edit_task/$taskId")
+                    nav?.navigate(route = Screen.Edit.editRoute(taskId))
                 }
             }
         }
