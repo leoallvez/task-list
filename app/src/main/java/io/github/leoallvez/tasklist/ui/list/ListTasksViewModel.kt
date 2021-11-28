@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.github.leoallvez.tasklist.Task
 
-class TaskListViewModel : ViewModel() {
+class ListTasksViewModel : ViewModel() {
 
     private val _tasks: MutableLiveData<List<Task>> = MutableLiveData()
     val task: LiveData<List<Task>> = _tasks

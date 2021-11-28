@@ -1,6 +1,5 @@
 package io.github.leoallvez.tasklist.ui.list
 
-import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -19,15 +18,21 @@ import androidx.compose.ui.unit.sp
 import io.github.leoallvez.tasklist.Task
 import io.github.leoallvez.tasklist.ui.theme.Purple700
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import io.github.leoallvez.tasklist.R
 
 @Composable
-fun TaskListScreen(viewModel: TaskListViewModel = viewModel()) {
-    val tasks by viewModel.task.observeAsState(initial = listOf())
+fun ListTasksScreen(
+    tasksViewModel: ListTasksViewModel = viewModel(),
+    nav: NavController?
+) {
+    val tasks by tasksViewModel.task.observeAsState(initial = listOf())
     Scaffold(topBar = { AppBar() },
         floatingActionButtonPosition = FabPosition.End,
         floatingActionButton = {
-            AddTaskButton {}
+            AddTaskButton {
+                nav?.navigate(route = "create_task")
+            }
         },
         content = {
             if(tasks.isEmpty()) {
@@ -35,7 +40,9 @@ fun TaskListScreen(viewModel: TaskListViewModel = viewModel()) {
                     Text(text = "List is empty")
                 }
             } else {
-                TaskList(tasks)
+                TaskList(tasks) { taskId ->
+                    nav?.navigate(route = "edit_task/$taskId")
+                }
             }
         }
     )
@@ -63,7 +70,7 @@ fun AppBar() {
 }
 
 @Composable
-fun TaskList(tasks: List<Task>) {
+fun TaskList(tasks: List<Task>, onClickItem: (taskId: Int) -> Unit) {
     val padding = 10.dp
     Surface(color = Color.LightGray, modifier = Modifier.fillMaxWidth()) {
         LazyColumn(
@@ -73,7 +80,7 @@ fun TaskList(tasks: List<Task>) {
         ) {
             items(tasks) { task ->
                 TaskItem(task) {
-                    Log.w("click", "item clicked on task id: ${task.id}")
+                    onClickItem.invoke(task.id)
                 }
             }
         }
@@ -119,5 +126,5 @@ fun TaskItem(task: Task, onClickItem: () -> Unit) {
 @Composable
 @Preview
 fun PreviewMainScreen() {
-    TaskListScreen()
+    ListTasksScreen(nav = null)
 }
