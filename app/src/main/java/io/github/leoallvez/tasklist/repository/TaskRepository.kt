@@ -1,17 +1,39 @@
 package io.github.leoallvez.tasklist.repository
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
+import io.github.leoallvez.tasklist.db.TaskDatabase
+import io.github.leoallvez.tasklist.di.IoDispatcher
 import io.github.leoallvez.tasklist.model.Task
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
-class TaskRepository @Inject constructor() {
+class TaskRepository @Inject constructor(
+    private val _database: TaskDatabase,
+    @IoDispatcher private val _dispatcher: CoroutineDispatcher
+) : ITaskRepository {
 
-    fun getTasks(): LiveData<List<Task>> {
-        val taskList = mutableListOf<Task>()
-        for(i in 0..100) {
-            taskList.add(Task(id = i, title = "title $i", description = "description $i", status = "pending"))
+    override suspend fun create(task: Task) {
+        withContext(_dispatcher) {
+            _database.taskDao().insert(task)
         }
-        return MutableLiveData(taskList)
+    }
+
+    override suspend fun getAll(): Flow<List<Task>> {
+        return withContext(_dispatcher) {
+            _database.taskDao().getAll()
+        }
+    }
+
+    override suspend fun update(task: Task) {
+        withContext(_dispatcher) {
+            _database.taskDao().update(task)
+        }
+    }
+
+    override suspend fun delete(task: Task) {
+        withContext(_dispatcher) {
+            _database.taskDao().delete(task)
+        }
     }
 }
