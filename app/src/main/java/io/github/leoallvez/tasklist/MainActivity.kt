@@ -40,7 +40,7 @@ fun TaskApp() {
             ListTasksScreen(nav = navController)
         }
         composable(route = Screen.Create.route) {
-            CreateTaskScreen()
+            CreateTaskScreen(nav = navController)
         }
         composable(
             route = Screen.Edit.route,

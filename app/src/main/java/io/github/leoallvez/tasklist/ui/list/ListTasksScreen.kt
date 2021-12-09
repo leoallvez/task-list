@@ -27,7 +27,7 @@ fun ListTasksScreen(
     nav: NavController?
 ) {
     val tasks = viewModel.getTasks().observeAsState(initial = listOf()).value
-    Scaffold(topBar = { AppBar(titleId = R.string.app_name) },
+    Scaffold(topBar = { AppBar(titleId = R.string.app_name) {} },
         floatingActionButtonPosition = FabPosition.End,
         floatingActionButton = {
             AddTaskButton {
