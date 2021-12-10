@@ -6,10 +6,10 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "tasks")
 data class Task(
     @PrimaryKey(autoGenerate = true)
-    val id: Int,
-    val title: String,
-    val description: String,
-    val status: String = PENDING
+    var id: Int = 0,
+    var title: String = "",
+    var description: String = "",
+    var status: String = PENDING
 ) {
     companion object {
         const val PENDING = "pending"
