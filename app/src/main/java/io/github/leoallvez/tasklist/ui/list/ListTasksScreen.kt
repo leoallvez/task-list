@@ -7,42 +7,60 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.google.accompanist.swiperefresh.SwipeRefresh
+import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import io.github.leoallvez.tasklist.R
 import io.github.leoallvez.tasklist.Screen
-import io.github.leoallvez.tasklist.Task
-import io.github.leoallvez.tasklist.ui.theme.Purple700
+import io.github.leoallvez.tasklist.model.Task
+import io.github.leoallvez.tasklist.ui.AddTaskButton
+import io.github.leoallvez.tasklist.ui.AppBar
+import io.github.leoallvez.tasklist.ui.LoadingCentred
 
 @Composable
 fun ListTasksScreen(
-    viewModel: ListTasksViewModel = hiltViewModel(),
-    nav: NavController?
+    viewModel: ListTasksViewModel?,
+    navController: NavController?
 ) {
+    viewModel?.refresh()
+    val tasks = viewModel?.tasks?.observeAsState(initial = null)?.value
 
-    val tasks = viewModel.task.observeAsState(initial = listOf()).value
-    Scaffold(topBar = { AppBar() },
+    Scaffold(topBar = { AppBar(titleId = R.string.app_name) {} },
         floatingActionButtonPosition = FabPosition.End,
         floatingActionButton = {
             AddTaskButton {
-                nav?.navigate(route = Screen.Create.route)
+                navController?.navigate(route = Screen.Create.route)
             }
         },
         content = {
-            if(tasks.isEmpty()) {
-                Surface(modifier = Modifier.fillMaxWidth()) {
-                    Text(text = "List is empty")
+            when {
+                tasks == null -> {
+                    LoadingCentred()
                 }
-            } else {
-                TaskList(tasks) { taskId ->
-                    nav?.navigate(route = Screen.Edit.editRoute(taskId))
+                tasks.isEmpty() -> {
+                    NoTaskFoundMessage()
+                } else -> {
+
+                    val isRefreshing by viewModel.isRefreshing.observeAsState(false)
+
+                    SwipeRefresh(
+                        state = rememberSwipeRefreshState(isRefreshing),
+                        onRefresh = { viewModel.refresh() },
+                    ) {
+                        TaskList(tasks) { taskId ->
+                            navController?.navigate(route = Screen.Edit.editRoute(taskId))
+                        }
+                    }
                 }
             }
         }
@@ -50,22 +68,16 @@ fun ListTasksScreen(
 }
 
 @Composable
-fun AddTaskButton(onClick: () -> Unit) {
-    FloatingActionButton(
-        backgroundColor = Purple700,
-        onClick = onClick
+fun NoTaskFoundMessage() {
+    Box(
+        contentAlignment = Alignment.Center,
+        modifier = Modifier.fillMaxSize()
     ) {
-        Text("+")
-    }
-}
-
-@Composable
-fun AppBar() {
-    TopAppBar(backgroundColor = Purple700) {
         Text(
-            text = stringResource(id = R.string.app_name),
-            modifier = Modifier.padding(start = 5.dp),
-            color = Color.White
+            text = stringResource(id = R.string.no_tasks_found),
+            style = MaterialTheme.typography.body2,
+            fontSize = 20.sp,
+            fontWeight = FontWeight.W500
         )
     }
 }
@@ -126,6 +138,6 @@ fun TaskItem(task: Task, onClickItem: () -> Unit) {
 
 @Composable
 @Preview
-fun PreviewMainScreen() {
-    //ListTasksScreen(nav = null)
+fun ListTasksScreen() {
+    ListTasksScreen(viewModel = null, navController = null)
 }
