@@ -16,6 +16,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import io.github.leoallvez.tasklist.ui.create.CreateTaskScreen
 import io.github.leoallvez.tasklist.ui.create.CreateTaskViewModel
 import io.github.leoallvez.tasklist.ui.edit.EditTaskScreen
+import io.github.leoallvez.tasklist.ui.edit.EditTaskViewModel
 import io.github.leoallvez.tasklist.ui.list.ListTasksScreen
 import io.github.leoallvez.tasklist.ui.theme.TaskListTheme
 
@@ -43,7 +44,10 @@ fun TaskApp() {
         }
         composable(route = Screen.Create.route) {
             val viewModel: CreateTaskViewModel = hiltViewModel()
-            CreateTaskScreen(viewModel = viewModel, nav = navController)
+            CreateTaskScreen(
+                viewModel = viewModel,
+                navController = navController
+            )
         }
         composable(
             route = Screen.Edit.route,
@@ -52,7 +56,10 @@ fun TaskApp() {
             })
         ) { navBackStackEntry ->
             val taskId = navBackStackEntry.arguments?.getInt("task_id")
-            EditTaskScreen(taskId = taskId)
+            EditTaskScreen(
+                taskId = taskId,
+                navController = navController
+            )
         }
     }
 }

@@ -13,15 +13,6 @@ class CreateTaskViewModel @Inject constructor(
     private val _repository: ITaskRepository
 ) : ViewModel() {
 
-//    init {
-//        createATask()
-//    }
-//
-//    private fun createATask() = viewModelScope.launch {
-//        val i = (0..10000).random()
-//        createTask(Task(id = 0, title = "title$i", description = "description$i", Task.PENDING))
-//    }
-
     fun createTask(task: Task) = viewModelScope.launch {
         _repository.create(task)
     }

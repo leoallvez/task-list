@@ -1,6 +1,9 @@
 <resources>
     <string name="app_name">Task List</string>
     <string name="create_task">Create Task</string>
+    <string name="task_created">Task Created</string>
+    <string name="edit_task">Edit Task</string>
     <string name="title">Title</string>
     <string name="description">Description</string>
+    <string name="invalid_field">Invalid Field</string>
 </resources>

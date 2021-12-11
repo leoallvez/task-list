@@ -12,4 +12,6 @@ interface ITaskRepository {
     suspend fun update(task: Task)
 
     suspend fun delete(task: Task)
+
+    suspend fun getTaskById(id: Int): Task
 }
