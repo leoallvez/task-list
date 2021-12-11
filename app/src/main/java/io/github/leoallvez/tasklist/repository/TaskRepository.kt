@@ -31,9 +31,9 @@ class TaskRepository @Inject constructor(
         }
     }
 
-    override suspend fun delete(task: Task) {
+    override suspend fun delete(id: Int) {
         withContext(_dispatcher) {
-            _database.taskDao().delete(task)
+            _database.taskDao().delete(id)
         }
     }
 

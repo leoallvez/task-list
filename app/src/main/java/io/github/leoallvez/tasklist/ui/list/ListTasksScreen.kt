@@ -1,17 +1,21 @@
 package io.github.leoallvez.tasklist.ui.list
 
+import android.util.Log
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.gestures.detectDragGestures
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -34,6 +38,7 @@ fun ListTasksScreen(
 ) {
     viewModel?.refresh()
     val tasks = viewModel?.tasks?.observeAsState(initial = null)?.value
+    var taskToDeleteId by remember { mutableStateOf<Int?>(value = null)}
 
     Scaffold(topBar = { AppBar(titleId = R.string.app_name) {} },
         floatingActionButtonPosition = FabPosition.End,
@@ -57,14 +62,60 @@ fun ListTasksScreen(
                         state = rememberSwipeRefreshState(isRefreshing),
                         onRefresh = { viewModel.refresh() },
                     ) {
-                        TaskList(tasks) { taskId ->
-                            navController?.navigate(route = Screen.Edit.editRoute(taskId))
-                        }
+                        TaskList(
+                            tasks = tasks,
+                            onClickItem =  { taskId ->
+                                navController?.navigate(route = Screen.Edit.editRoute(taskId))
+                            },
+                            onLongPress = { taskId -> taskToDeleteId = taskId }
+                        )
                     }
                 }
             }
+
+            DeleteTaskAlert(
+                taskId = taskToDeleteId,
+                onClickButton = {
+                    it?.let { viewModel?.deleteTask(it) }
+                    taskToDeleteId = null
+                }
+            )
         }
     )
+}
+
+
+@Composable
+fun DeleteTaskAlert(taskId: Int?, onClickButton: (taskI: Int?) -> Unit) {
+    taskId?.let {
+        Column {
+            AlertDialog(
+                onDismissRequest = {},
+                title = {
+                    Text(text = "Delete Task")
+                },
+                text = {
+                    Column {
+                        Text(text = "Do you want to delete the task?", fontWeight = FontWeight.Bold)
+                    }
+                },
+                confirmButton = {
+                    Button(onClick = {
+                        onClickButton.invoke(taskId)
+                    }) {
+                        Text("Confirm")
+                    }
+                },
+                dismissButton = {
+                    Button(onClick = {
+                        onClickButton.invoke(null)
+                    }) {
+                        Text("Cancel")
+                    }
+                }
+            )
+        }
+    }
 }
 
 @Composable
@@ -83,7 +134,11 @@ fun NoTaskFoundMessage() {
 }
 
 @Composable
-fun TaskList(tasks: List<Task>, onClickItem: (taskId: Int) -> Unit) {
+fun TaskList(
+    tasks: List<Task>,
+    onClickItem: (taskId: Int) -> Unit,
+    onLongPress: (taskId: Int) -> Unit
+) {
     val padding = 10.dp
     Surface(color = Color.LightGray, modifier = Modifier.fillMaxWidth()) {
         LazyColumn(
@@ -92,16 +147,22 @@ fun TaskList(tasks: List<Task>, onClickItem: (taskId: Int) -> Unit) {
                 .fillMaxSize()
         ) {
             items(tasks) { task ->
-                TaskItem(task) {
-                    onClickItem.invoke(task.id)
-                }
+                TaskItem(
+                    task = task,
+                    onClickItem = {
+                        onClickItem.invoke(task.id)
+                    },
+                    onLongPress = {
+                        onLongPress.invoke(task.id)
+                    }
+                )
             }
         }
     }
 }
 
 @Composable
-fun TaskItem(task: Task, onClickItem: () -> Unit) {
+fun TaskItem(task: Task, onClickItem: () -> Unit, onLongPress: () -> Unit) {
     val cardPadding = 5.dp
     Card(
         shape = RoundedCornerShape(8.dp),
@@ -110,6 +171,11 @@ fun TaskItem(task: Task, onClickItem: () -> Unit) {
             .padding(top = cardPadding, bottom = cardPadding)
             .height(80.dp)
             .clickable { onClickItem.invoke() }
+            .pointerInput(Unit) {
+                detectTapGestures(
+                    onLongPress = { onLongPress.invoke() },
+                )
+            }
             .fillMaxSize()
     ) {
         Column {

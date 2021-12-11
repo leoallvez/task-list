@@ -8,6 +8,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import androidx.lifecycle.viewModelScope
 
 @HiltViewModel
 class ListTasksViewModel @Inject constructor(
@@ -28,5 +29,9 @@ class ListTasksViewModel @Inject constructor(
                 _isRefreshing.value = false
             }
         }
+    }
+
+    fun deleteTask(taskId: Int) = viewModelScope.launch {
+        _repository.delete(taskId)
     }
 }
