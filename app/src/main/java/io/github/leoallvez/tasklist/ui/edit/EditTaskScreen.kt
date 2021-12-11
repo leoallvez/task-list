@@ -20,8 +20,7 @@ fun EditTaskScreen(
     taskId: Int?,
     navController: NavController?
 ) {
-    viewModel.recoverTaskById(id = taskId)
-    val task: Task? = viewModel.task.observeAsState(initial = null).value
+    val task: Task? = viewModel.getTaskById(taskId).observeAsState(initial = null).value
     Scaffold(
         topBar = {
             FormAppBar(titleId = R.string.edit_task) {

@@ -37,9 +37,9 @@ class TaskRepository @Inject constructor(
         }
     }
 
-    override suspend fun getTaskById(id: Int): Task {
+    override suspend fun getById(id: Int): Flow<Task> {
         return withContext(_dispatcher) {
-            _database.taskDao().getTaskById(id)
+            _database.taskDao().getById(id)
         }
     }
 }

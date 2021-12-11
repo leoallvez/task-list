@@ -16,8 +16,8 @@ import dagger.hilt.android.AndroidEntryPoint
 import io.github.leoallvez.tasklist.ui.create.CreateTaskScreen
 import io.github.leoallvez.tasklist.ui.create.CreateTaskViewModel
 import io.github.leoallvez.tasklist.ui.edit.EditTaskScreen
-import io.github.leoallvez.tasklist.ui.edit.EditTaskViewModel
 import io.github.leoallvez.tasklist.ui.list.ListTasksScreen
+import io.github.leoallvez.tasklist.ui.list.ListTasksViewModel
 import io.github.leoallvez.tasklist.ui.theme.TaskListTheme
 
 @AndroidEntryPoint
@@ -40,7 +40,11 @@ fun TaskApp() {
     val navController = rememberNavController()
     NavHost(navController = navController, startDestination = Screen.List.route) {
         composable(route = Screen.List.route) {
-            ListTasksScreen(nav = navController)
+            val viewModel: ListTasksViewModel = hiltViewModel()
+            ListTasksScreen(
+                viewModel = viewModel,
+                navController = navController
+            )
         }
         composable(route = Screen.Create.route) {
             val viewModel: CreateTaskViewModel = hiltViewModel()
