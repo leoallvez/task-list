@@ -16,6 +16,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import io.github.leoallvez.tasklist.ui.create.CreateTaskScreen
 import io.github.leoallvez.tasklist.ui.create.CreateTaskViewModel
 import io.github.leoallvez.tasklist.ui.edit.EditTaskScreen
+import io.github.leoallvez.tasklist.ui.edit.EditTaskViewModel
 import io.github.leoallvez.tasklist.ui.list.ListTasksScreen
 import io.github.leoallvez.tasklist.ui.list.ListTasksViewModel
 import io.github.leoallvez.tasklist.ui.theme.TaskListTheme
@@ -60,7 +61,9 @@ fun TaskApp() {
             })
         ) { navBackStackEntry ->
             val taskId = navBackStackEntry.arguments?.getInt("task_id")
+            val viewModel: EditTaskViewModel = hiltViewModel()
             EditTaskScreen(
+                viewModel = viewModel,
                 taskId = taskId,
                 navController = navController
             )

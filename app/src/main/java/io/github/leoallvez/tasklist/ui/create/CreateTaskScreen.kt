@@ -31,7 +31,7 @@ fun CreateTaskScreen(
                 viewModel?.createTask(task)
                 Toast.makeText(
                     context,
-                    R.string.create_task,
+                    R.string.created_task,
                     Toast.LENGTH_LONG
                 ).show()
                 navController?.navigate(Screen.List.route)
