@@ -91,11 +91,10 @@ fun TaskForm(
                 isEditing = isEditing,
                 enabled = title.isNotEmpty() && description.isNotEmpty()
             ) {
-                task.title = title
-                task.description = description
-                if(task.isFilled()) {
-                    onSave(task)
-                }
+                onSave(task.apply {
+                    this.title = title
+                    this.description = description
+                })
             }
         }
     }
